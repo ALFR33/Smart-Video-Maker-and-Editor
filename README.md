@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Salh Alheib Klel Studio - AI Web Music & Video App</title>
+  <title>Salh Alheib Klel Studio - AI Web Music & Video Studio</title>
 
-  <!-- Tailwind CSS للتصميم -->
+  <!-- Tailwind CSS للتصميم والتنسيق -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -56,6 +56,7 @@
     <nav class="flex items-center gap-1 bg-neutral-950 p-1 rounded-xl border border-neutral-800">
       <button onclick="switchTab('ai')" id="tab-ai" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950">استوديو الموسيقى</button>
       <button onclick="switchTab('video')" id="tab-video" class="px-3 py-1.5 rounded-lg text-xs font-bold text-neutral-400 hover:text-neutral-200">صانع الفيديوهات (Video AI)</button>
+      <button onclick="switchTab('chat')" id="tab-chat" class="px-3 py-1.5 rounded-lg text-xs font-bold text-neutral-400 hover:text-neutral-200">المساعد الذكي (Chatbot)</button>
       <button onclick="switchTab('rack')" id="tab-rack" class="px-3 py-1.5 rounded-lg text-xs font-bold text-neutral-400 hover:text-neutral-200">الموزع (Rack)</button>
       <button onclick="switchTab('mixer')" id="tab-mixer" class="px-3 py-1.5 rounded-lg text-xs font-bold text-neutral-400 hover:text-neutral-200">الميكسر (Mixer)</button>
     </nav>
@@ -125,8 +126,27 @@
           <button onclick="setVidPrompt('🎬 شخص يقف على قمة جبل عند شروق الشمس والغيوم الساحرة سينمائي')" class="p-2 bg-neutral-950 border border-neutral-800 rounded-lg text-[11px] font-bold text-neutral-300">🎬 تحفيز وطاقة</button>
         </div>
 
-        <label class="text-xs font-bold text-neutral-300">وصف مشهد الفيديو</label>
-        <textarea id="videoPromptText" rows="3" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 focus:outline-none focus:border-orange-500">مشهد جبال ثلجية هادئة وغابات صنوبرية في الشتاء سينمائي</textarea>
+        <label class="text-xs font-bold text-neutral-300">وصف المشهد المرئي</label>
+        <textarea id="videoPromptText" rows="2" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-xs text-neutral-200 focus:outline-none focus:border-orange-500">مشهد جبال ثلجية هادئة وغابات صنوبرية في الشتاء سينمائي</textarea>
+
+        <!-- مدة الفيديو وأبعاده -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <span class="text-[10px] font-mono text-neutral-400 block mb-1">أبعاد الفيديو</span>
+            <div class="flex gap-2">
+              <button class="flex-1 py-1 bg-orange-500 text-neutral-950 font-bold text-xs rounded-lg">9:16 (Shorts)</button>
+              <button class="flex-1 py-1 bg-neutral-950 text-neutral-400 font-bold text-xs rounded-lg border border-neutral-800">16:9 (YouTube)</button>
+            </div>
+          </div>
+          <div>
+            <span class="text-[10px] font-mono text-neutral-400 block mb-1">مدة الفيديو</span>
+            <div class="flex gap-1">
+              <button class="flex-1 py-1 bg-amber-500 text-neutral-950 font-bold text-xs rounded-lg">30s</button>
+              <button class="flex-1 py-1 bg-neutral-950 text-neutral-400 font-bold text-xs rounded-lg border border-neutral-800">60s</button>
+              <button class="flex-1 py-1 bg-neutral-950 text-neutral-400 font-bold text-xs rounded-lg border border-neutral-800">120s (2m)</button>
+            </div>
+          </div>
+        </div>
 
         <button onclick="generateVideoSample()" id="vidGenBtn" class="w-full py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 font-extrabold text-xs rounded-xl shadow-lg hover:brightness-110 transition">
           توليد الفيديو السينمائي الآن
@@ -138,6 +158,20 @@
         <div id="videoContainer" class="flex flex-col items-center justify-center min-h-[250px] bg-neutral-950 rounded-xl border border-neutral-800 p-4 relative overflow-hidden text-center text-neutral-500 text-xs">
           اختر أحد التصنيفات واضغط توليد الفيديو للمعاينة والتنزيل!
         </div>
+      </div>
+    </div>
+
+    <!-- قسم المساعد الذكي AI Producer Chatbot -->
+    <div id="section-chat" class="hidden bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow-2xl flex-col gap-3 h-[450px]">
+      <h2 class="text-sm font-extrabold text-orange-400 border-b border-neutral-800 pb-2">المساعد الذكي (AI Producer Chat)</h2>
+      <div id="chatMessagesBox" class="flex-1 overflow-y-auto flex flex-col gap-2 p-3 bg-neutral-950 rounded-xl border border-neutral-800">
+        <div class="p-2.5 rounded-xl text-xs max-w-[80%] bg-neutral-900 text-neutral-200 border border-neutral-800 self-end">
+          أهلاً بك في Salh Alheib Klel Studio! أنا مساعدك الذكي لتوليد الموسيقى، الفيديوهات السينمائية، وبناء المواقع. كيف يمكنني مساعدتك اليوم؟
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <input type="text" id="chatInputText" onkeydown="if(event.key==='Enter') sendChatMsg()" placeholder="اكتب طلبك للمساعد الذكي هنا..." class="flex-1 bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2 text-xs text-neutral-200 focus:outline-none focus:border-orange-500" />
+        <button onclick="sendChatMsg()" class="px-4 py-2 bg-orange-500 text-neutral-950 font-bold text-xs rounded-xl">إرسال</button>
       </div>
     </div>
 
@@ -196,7 +230,7 @@
     </div>
   </div>
 
-  <!-- 3. البرمجة بالأصوات Pure Web Audio Engine -->
+  <!-- 3. البرمجة بالأصوات Pure Web Audio API Engine -->
   <script>
     class WebAudioEngine {
       constructor() {
@@ -390,17 +424,40 @@
     function switchTab(tab) {
       document.getElementById('section-ai').classList.add('hidden');
       document.getElementById('section-video').classList.add('hidden');
+      document.getElementById('section-chat').classList.add('hidden');
       document.getElementById('section-rack').classList.add('hidden');
       document.getElementById('section-mixer').classList.add('hidden');
 
       const el = document.getElementById(`section-${tab}`);
       el.classList.remove('hidden');
       if (tab === 'video' || tab === 'ai') el.classList.add('grid');
-      if (tab === 'rack' || tab === 'mixer') el.classList.add('flex');
+      if (tab === 'rack' || tab === 'mixer' || tab === 'chat') el.classList.add('flex');
     }
 
     function setVidPrompt(p) {
       document.getElementById('videoPromptText').value = p;
+    }
+
+    function sendChatMsg() {
+      const input = document.getElementById('chatInputText');
+      const txt = input.value.trim();
+      if (!txt) return;
+
+      const box = document.getElementById('chatMessagesBox');
+      const userDiv = document.createElement('div');
+      userDiv.className = 'p-2.5 rounded-xl text-xs max-w-[80%] bg-orange-500 text-neutral-950 font-bold self-start';
+      userDiv.innerText = txt;
+      box.appendChild(userDiv);
+
+      input.value = '';
+
+      setTimeout(() => {
+        const botDiv = document.createElement('div');
+        botDiv.className = 'p-2.5 rounded-xl text-xs max-w-[80%] bg-neutral-900 text-neutral-200 border border-neutral-800 self-end';
+        botDiv.innerText = `تم استلام طلبك "${txt}"! يمكنك التوليد مباشرة من أقسام الاستوديو.`;
+        box.appendChild(botDiv);
+        box.scrollTop = box.scrollHeight;
+      }, 500);
     }
 
     function generateAISong() {
@@ -437,9 +494,9 @@
         const container = document.getElementById('videoContainer');
         container.innerHTML = `
           <div class="relative w-full rounded-lg overflow-hidden bg-black">
-            <video src="https://storage.googleapis.com/producer-app-public/assets/c2ef9293-3182-4429-be07-97aa893d10ed.mp4" controls autoplay loop class="w-full max-h-64 object-contain"></video>
-            <div class="absolute top-2 right-2 bg-neutral-950/90 text-orange-400 font-extrabold text-[10px] px-2 py-1 rounded shadow border border-orange-500/30">
-              Salh Alheib Klel Studio
+            <video src="https://storage.googleapis.com/producer-app-public/assets/f2a6668f-6bbd-422c-b870-495bbc12da24.mp4" controls autoplay loop class="w-full max-h-64 object-contain"></video>
+            <div class="absolute bottom-2 right-2 bg-neutral-950/80 text-orange-400 font-bold text-[8px] px-1.5 py-0.5 rounded border border-orange-500/20">
+              Salh Alheib Klel
             </div>
           </div>
           <p class="text-xs text-neutral-300 font-bold mt-2">${prompt}</p>
@@ -492,3 +549,4 @@
   </script>
 </body>
 </html>
+
